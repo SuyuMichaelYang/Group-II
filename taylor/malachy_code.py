@@ -1,15 +1,10 @@
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import math
 
 def taylor(x,c):
-    ts = [1]
-    n=1
-    while len(ts) < ncoef:
-        ts.append(x**n)
-        if len(ts) < ncoef:
-            ts.append(n*np.cos(x))
-        n+=1
+    ts = [x**n/math.factorial(n) for n in range(ncoef)]
     return np.dot(np.array(c),np.array(ts))
 
 def fourier(x,c):
@@ -25,6 +20,6 @@ def fourier(x,c):
 
 ncoef = 4
 c = [random.uniform(0,1.5)]
-    while len(c) < ncoef:
-        rand = random.uniform(-1.5,1.5)
-        c.append(rand)
+while len(c) < ncoef:
+    rand = random.uniform(-1.5,1.5)
+    c.append(rand)
