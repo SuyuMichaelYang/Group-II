@@ -34,9 +34,9 @@ def deriv(f,t,param): # return derivatives of the array f[x,dx/dt,theta,dtheta/d
 ncoef = 4
 k = 1
 m = 1
-c = [random.uniform(0,1.5)]
+c = []
 while len(c) < ncoef:
-    rand = random.uniform(-1.5,1.5)
+    rand = random.uniform(-1,1)
     c.append(rand)
 
 #Define the time array
@@ -48,8 +48,10 @@ yinit = [0,0] # initial values of x0 and dx0, respectively
 param = np.array([0.2]) #Setting the value of gammaD in the param array so that it can be passed to the deriv function
 f_solun = odeint(deriv,yinit,time,args=(param,))
 
+print(c)
 plt.figure()
 plt.plot(time, f_solun[:,0])
 plt.xlabel('Time [s]')
 plt.ylabel('x')
 plt.show()
+plt.savefig('foo.png')
