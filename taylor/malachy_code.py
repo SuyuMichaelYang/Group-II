@@ -19,7 +19,7 @@ def fourier(x,c):
     #     n+=1
     return np.dot(np.array(c),np.array(fs))
 
-def deriv(f,t,param): # return derivatives of the array f[x,dx/dt,theta,dtheta/dt]
+def deriv(f,t): # return derivatives of the array f[x,dx/dt,theta,dtheta/dt]
     x = f[0]
     dxdt = f[1]
 
@@ -27,6 +27,7 @@ def deriv(f,t,param): # return derivatives of the array f[x,dx/dt,theta,dtheta/d
     # d2xdt2 = gammaD*omega0**2*np.cos(omegaD*t) - 2*betaD*dxdt - omega0**2*np.sin(x)
     #Without
     d2xdt2 = - taylor(x, c)/m*dxdt - k*x/m
+    # d2xdt2 = - 1/m*dxdt - k*x/m
     
     return [dxdt,d2xdt2]
 
@@ -36,17 +37,17 @@ k = 1
 m = 1
 c = []
 while len(c) < ncoef:
-    rand = random.uniform(-1,1)
+    rand = random.uniform(0,1)
     c.append(rand)
 
 #Define the time array
-max_time = 10
-n_steps = 10000
+max_time = 20
+n_steps = 1000000
 time = np.linspace(0.0,max_time,n_steps)
 
-yinit = [0,0] # initial values of x0 and dx0, respectively
+yinit = [1,0] # initial values of x0 and dx0, respectively
 param = np.array([0.2]) #Setting the value of gammaD in the param array so that it can be passed to the deriv function
-f_solun = odeint(deriv,yinit,time,args=(param,))
+f_solun = odeint(deriv,yinit,time)
 
 print(c)
 plt.figure()
@@ -54,4 +55,4 @@ plt.plot(time, f_solun[:,0])
 plt.xlabel('Time [s]')
 plt.ylabel('x')
 plt.show()
-plt.savefig('foo.png')
+plt.savefig('foo3.png')
