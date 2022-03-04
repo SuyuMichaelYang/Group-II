@@ -32,7 +32,7 @@ def deriv(f,t): # return derivatives of the array f[x,dx/dt,theta,dtheta/dt]
     return [dxdt,d2xdt2]
 
 
-ncoef = 4
+ncoef = 7
 k = 1
 m = 1
 c = []
