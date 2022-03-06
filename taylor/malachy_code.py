@@ -3,6 +3,9 @@ import random
 import matplotlib.pyplot as plt
 import math
 from scipy.integrate import odeint
+import sys
+from PyQt5.QtWidgets import QApplication
+# import pyautogui
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
@@ -60,6 +63,16 @@ yinit = [1,0] # initial values of x0 and dx0, respectively
 f_solun = odeint(deriv,yinit,time)
 equilibrium = [0 for n in range(len(time))]
 
+# desired_sizex, desired_sizey = 800, 800
+# app = QApplication(sys.argv)
+# screen = app.screens()[0]
+# my_dpi = screen.physicalDotsPerInch()
+# app.quit()
+# width, height = pyautogui.size()
+# print(width, height)
+# print(my_dpi)
+
+
 plt.figure()
 plt.plot(time, f_solun[:,0])
 plt.plot(time, equilibrium)
@@ -68,7 +81,7 @@ plt.xlabel('Time [s]')
 plt.ylabel('x')
 plt.show()
 
-fig, axs = plt.subplots(2, 3)
+fig, axs = plt.subplots(2, 3, figsize=(12, 12))
 
 axs[0, 0].plot(f_solun[:,0], time)
 axs[0, 0].plot(equilibrium, time)
@@ -103,4 +116,4 @@ plt.show()
 
 fig_title = str(ck) + ".png"
 print(fig_title)
-plt.savefig(fig_title)
+plt.savefig(fig_title, dpi=96)
