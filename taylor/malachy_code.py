@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import math
 from scipy.integrate import odeint
+import pylab as plt
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
@@ -67,7 +68,6 @@ plt.plot(time, equilibrium)
 plt.xlabel('Time [s]')
 plt.ylabel('x')
 plt.show()
-#plt.savefig('foo.png')
 
 fig, axs = plt.subplots(2, 3)
 
@@ -101,3 +101,7 @@ axs[1, 2].set_title('k Function')
 axs[1, 2].set(xlabel='Position', ylabel='Coefficient Value')
 
 plt.show()
+
+fig_title = str(ck) + ".png"
+print(fig_title)
+plt.savefig(fig_title)
