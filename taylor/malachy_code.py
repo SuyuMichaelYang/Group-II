@@ -3,7 +3,6 @@ import random
 import matplotlib.pyplot as plt
 import math
 from scipy.integrate import odeint
-import pylab as plt
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
