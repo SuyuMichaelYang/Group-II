@@ -18,7 +18,7 @@ def fourier(x,c):
             fs.append(np.cos(n*x/L))
         n+=1
     return np.dot(np.array(c),np.array(fs))
-
+  
 def make_coeffs(c,lb,ub):
     while len(c) < ncoef:
         c.append(random.uniform(lb,ub))
@@ -48,6 +48,7 @@ ck = make_coeffs(ck,0,1)
 #Define the time array and other plotting stuff
 max_time = 10
 n_steps = 10000
+
 time = np.linspace(0.0,max_time,n_steps)
 space = np.linspace(-1,1,n_steps)
 
