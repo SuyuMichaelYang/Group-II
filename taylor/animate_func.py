@@ -87,7 +87,7 @@ fig, axs = plt.subplots(2, 3, figsize=(12, 12))
 
 camera = Camera(fig)
 
-for i in range(0, n_steps, 5):
+for i in range(0, n_steps, 50):
     axs[0, 0].plot(f_solun[:,0][:i], time[:i])
     axs[0, 0].plot(equilibrium[:i], time[:i])
     axs[0, 0].set_title('System Position Solution')
@@ -98,10 +98,10 @@ for i in range(0, n_steps, 5):
     axs[0, 1].set_title('System Velocity Solution')
     axs[0, 1].set(xlabel='Velocity', ylabel='Time')
 
-    '''axs[0, 2].plot(f_solun[:,1], time)
-    axs[0, 2].plot(equilibrium, time)
+    axs[0, 2].plot(f_solun[:,1][:i], time[:i])
+    axs[0, 2].plot(equilibrium[:i], time[:i])
     axs[0, 2].set_title('System Solution')
-    axs[0, 2].set(xlabel='Velocity', ylabel='Time')'''
+    axs[0, 2].set(xlabel='Velocity', ylabel='Time')
 
     axs[1, 0].plot(time[:i], m_func[:i])
     axs[1, 0].set_title('Mass Function')
@@ -118,6 +118,6 @@ for i in range(0, n_steps, 5):
     axs[1, 2].set(xlabel='Position', ylabel='Coefficient Value')
     print("Snap " + str(i))
     camera.snap()
-    
+print("Ready to capture")
 animation = camera.animate()
 animation.save('test_animation.mp4')
