@@ -7,6 +7,7 @@ from scipy.integrate import odeint
 # from PyQt5.QtWidgets import QApplication
 from matplotlib.animation import FuncAnimation
 # import pyautogui
+from celluloid import Camera
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
@@ -84,37 +85,39 @@ plt.show()
 
 fig, axs = plt.subplots(2, 3, figsize=(12, 12))
 
-axs[0, 0].plot(f_solun[:,0], time)
-axs[0, 0].plot(equilibrium, time)
-axs[0, 0].set_title('System Position Solution')
-axs[0, 0].set(xlabel='Position', ylabel='Time')
+camera = Camera(fig)
 
-axs[0, 1].plot(f_solun[:,1], time)
-axs[0, 1].plot(equilibrium, time)
-axs[0, 1].set_title('System Velocity Solution')
-axs[0, 1].set(xlabel='Velocity', ylabel='Time')
+for i in range(0, n_steps, 5):
+    axs[0, 0].plot(f_solun[:,0][:i], time[:i])
+    axs[0, 0].plot(equilibrium[:i], time[:i])
+    axs[0, 0].set_title('System Position Solution')
+    axs[0, 0].set(xlabel='Position', ylabel='Time')
 
-'''axs[0, 2].plot(f_solun[:,1], time)
-axs[0, 2].plot(equilibrium, time)
-axs[0, 2].set_title('System Solution')
-axs[0, 2].set(xlabel='Velocity', ylabel='Time')'''
+    axs[0, 1].plot(f_solun[:,1][:i], time[:i])
+    axs[0, 1].plot(equilibrium[:i], time[:i])
+    axs[0, 1].set_title('System Velocity Solution')
+    axs[0, 1].set(xlabel='Velocity', ylabel='Time')
 
-axs[1, 0].plot(time, m_func)
-axs[1, 0].set_title('Mass Function')
-axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
+    '''axs[0, 2].plot(f_solun[:,1], time)
+    axs[0, 2].plot(equilibrium, time)
+    axs[0, 2].set_title('System Solution')
+    axs[0, 2].set(xlabel='Velocity', ylabel='Time')'''
 
-axs[1, 1].plot(space, b_func)
-axs[1, 1].plot(equilibrium,space)
-axs[1, 1].set_title('Drag Function')
-axs[1, 1].set(xlabel='Position', ylabel='Coefficient Value')
+    axs[1, 0].plot(time[:i], m_func[:i])
+    axs[1, 0].set_title('Mass Function')
+    axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
 
-axs[1, 2].plot(space, k_func)
-axs[1, 2].plot(equilibrium,space)
-axs[1, 2].set_title('k Function')
-axs[1, 2].set(xlabel='Position', ylabel='Coefficient Value')
+    axs[1, 1].plot(space[:i], b_func[:i])
+    axs[1, 1].plot(equilibrium[:i],space[:i])
+    axs[1, 1].set_title('Drag Function')
+    axs[1, 1].set(xlabel='Position', ylabel='Coefficient Value')
 
-plt.show()
-
-fig_title = str(ck) + ".png"
-print(fig_title)
-plt.savefig(fig_title, dpi=96)
+    axs[1, 2].plot(space[:i], k_func[:i])
+    axs[1, 2].plot(equilibrium[:i],space[:i])
+    axs[1, 2].set_title('k Function')
+    axs[1, 2].set(xlabel='Position', ylabel='Coefficient Value')
+    print("Snap " + str(i))
+    camera.snap()
+    
+animation = camera.animate()
+animation.save('test_animation.mp4')
