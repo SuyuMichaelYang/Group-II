@@ -3,6 +3,8 @@ import random
 import matplotlib.pyplot as plt
 import math
 from scipy.integrate import odeint
+from mpl_toolkits import mplot3d
+from celluloid import Camera
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
@@ -80,58 +82,133 @@ for trial in ICs:
     radii.append(radius)
     masses_list.append(mass_list)
     times_list.append(time_list)
-    
+
 mt_func = [m(t,0,0) for t in time]
 b_func = [b(0,x) for x in space]
 k_func = [k(0,x,0) for x in space]
 equilibrium = [0 for n in range(len(time))]
 
-'''plt.figure()
-plt.plot(time, f_soluns[0][:,0])
-plt.plot(time, equilibrium)
-plt.xlabel('Time [s]')
-plt.ylabel('x')
-plt.show()
-plt.savefig('foo.png')'''
+def subplots():
 
-fig, axs = plt.subplots(2, 4)
+    '''plt.figure()
+    plt.plot(time, f_soluns[0][:,0])
+    plt.plot(time, equilibrium)
+    plt.xlabel('Time [s]')
+    plt.ylabel('x')
+    plt.show()
+    plt.savefig('foo.png')'''
 
-axs[0, 0].plot(f_soluns[0][:,0], time)
-axs[0, 0].plot(equilibrium, time)
-axs[0, 0].set_title('System Position Solution')
-axs[0, 0].set(xlabel='Position', ylabel='Time')
+    fig, axs = plt.subplots(2, 4)
 
-axs[0, 1].plot(f_soluns[0][:,1], time)
-axs[0, 1].plot(equilibrium, time)
-axs[0, 1].set_title('System Velocity Solution')
-axs[0, 1].set(xlabel='Velocity', ylabel='Time')
+    axs[0, 0].plot(f_soluns[0][:,0], time)
+    axs[0, 0].plot(equilibrium, time)
+    axs[0, 0].set_title('System Position Solution')
+    axs[0, 0].set(xlabel='Position', ylabel='Time')
 
-axs[1, 1].plot(f_soluns[0][:,0], f_soluns[0][:,1])
-axs[1, 1].set_title('Phase Space')
-axs[1, 1].set(xlabel='Position', ylabel='Velocity')
+    axs[0, 1].plot(f_soluns[0][:,1], time)
+    axs[0, 1].plot(equilibrium, time)
+    axs[0, 1].set_title('System Velocity Solution')
+    axs[0, 1].set(xlabel='Velocity', ylabel='Time')
 
-for sol in phase_spaces:
-    axs[1, 2].plot(np.array(sol)[:,0], np.array(sol)[:,1])
-axs[1, 2].set_title('Phase Space')
-axs[1, 2].set(xlabel='Position', ylabel='Momentum')
+    axs[1, 1].plot(f_soluns[0][:,0], f_soluns[0][:,1])
+    axs[1, 1].set_title('Phase Space')
+    axs[1, 1].set(xlabel='Position', ylabel='Velocity')
 
-axs[1, 0].plot(times_list[0], masses_list[0])
-axs[1, 0].set_title('Mass Function')
-axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
+    for sol in phase_spaces:
+        axs[1, 2].plot(np.array(sol)[:,0], np.array(sol)[:,1])
+    axs[1, 2].set_title('Phase Space')
+    axs[1, 2].set(xlabel='Position', ylabel='Momentum')
 
-axs[0, 3].plot(times_list[0], radii[0])
-axs[0, 3].set_title('Radius vs. Time')
-axs[0, 3].set(xlabel='Time', ylabel='||p,x||')
+    axs[1, 0].plot(times_list[0], masses_list[0])
+    axs[1, 0].set_title('Mass Function')
+    axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
 
-i = 0
-while i < len(radii):
-    axs[1, 3].plot(times_list[i], radii[i])
-    i += 1
-axs[1, 3].set_title('Radius vs. Time')
-axs[1, 3].set(xlabel='Time', ylabel='||p,x||')
+    axs[0, 3].plot(times_list[0], radii[0])
+    axs[0, 3].set_title('Radius vs. Time')
+    axs[0, 3].set(xlabel='Time', ylabel='||p,x||')
 
-axs[0, 2].plot(np.array(phase_spaces[0])[:,0], np.array(phase_spaces[0])[:,1])
-axs[0, 2].set_title('Phase Space')
-axs[0, 2].set(xlabel='Position', ylabel='Momentum')
+    i = 0
+    while i < len(radii):
+        axs[1, 3].plot(times_list[i], radii[i])
+        i += 1
+    axs[1, 3].set_title('Radius vs. Time')
+    axs[1, 3].set(xlabel='Time', ylabel='||p,x||')
 
-plt.show()
+    axs[0, 2].plot(np.array(phase_spaces[0])[:,0], np.array(phase_spaces[0])[:,1])
+    axs[0, 2].set_title('Phase Space')
+    axs[0, 2].set(xlabel='Position', ylabel='Momentum')
+
+    plt.show()
+def three_d():
+    f = lambda x, y: np.sin(np.sqrt(x ** 2 + y ** 2))
+    x = np.linspace(-6, 6, 30)
+    y = np.linspace(-6, 6, 30)
+
+    X, Y = np.meshgrid(x, y)
+    Z = f(X, Y)
+
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.contour3D(X, Y, Z, 50, cmap='binary')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+def animate():
+    fig, axs = plt.subplots(2, 4)
+    camera = Camera(fig)
+
+    for i in range(0, n_steps, 200):
+        '''plt.figure()
+        plt.plot(time, f_soluns[0][:,0])
+        plt.plot(time, equilibrium)
+        plt.xlabel('Time [s]')
+        plt.ylabel('x')
+        plt.show()
+        plt.savefig('foo.png')'''
+
+        axs[0, 0].plot(f_soluns[0][:,0][:i], time[:i])
+        axs[0, 0].plot(equilibrium[:i], time[:i])
+        axs[0, 0].set_title('System Position Solution')
+        axs[0, 0].set(xlabel='Position', ylabel='Time')
+
+        axs[0, 1].plot(f_soluns[0][:,1][:i], time[:i])
+        axs[0, 1].plot(equilibrium[:i], time[:i])
+        axs[0, 1].set_title('System Velocity Solution')
+        axs[0, 1].set(xlabel='Velocity', ylabel='Time')
+
+        axs[1, 1].plot(f_soluns[0][:,0][:i], f_soluns[0][:,1][:i])
+        axs[1, 1].set_title('Phase Space')
+        axs[1, 1].set(xlabel='Position', ylabel='Velocity')
+
+        for sol in phase_spaces:
+            axs[1, 2].plot(np.array(sol)[:,0][:i], np.array(sol)[:,1][:i])
+        axs[1, 2].set_title('Phase Space')
+        axs[1, 2].set(xlabel='Position', ylabel='Momentum')
+
+        axs[1, 0].plot(times_list[0][:i], masses_list[0][:i])
+        axs[1, 0].set_title('Mass Function')
+        axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
+
+        axs[0, 3].plot(times_list[0][:i], radii[0][:i])
+        axs[0, 3].set_title('Radius vs. Time')
+        axs[0, 3].set(xlabel='Time', ylabel='||p,x||')
+
+        j = 0
+        while j < len(radii):
+            axs[1, 3].plot(times_list[j][:i], radii[j][:i])
+            j += 1
+        axs[1, 3].set_title('Radius vs. Time')
+        axs[1, 3].set(xlabel='Time', ylabel='||p,x||')
+
+        axs[0, 2].plot(np.array(phase_spaces[0])[:,0][:i], np.array(phase_spaces[0])[:,1][:i])
+        axs[0, 2].set_title('Phase Space')
+        axs[0, 2].set(xlabel='Position', ylabel='Momentum')
+        print("Snap " + str(i))
+        camera.snap()
+    print("Ready to capture")
+    animation = camera.animate()
+    animation.save('test_animation.mp4')
+
+
+
+animate()
