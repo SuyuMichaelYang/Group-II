@@ -98,7 +98,7 @@ def subplots():
     plt.show()
     plt.savefig('foo.png')'''
 
-    fig, axs = plt.subplots(2, 4)
+    fig, axs = plt.subplots(2, 4, figsize=(12, 12))
 
     axs[0, 0].plot(f_soluns[0][:,0], time)
     axs[0, 0].plot(equilibrium, time)
@@ -154,10 +154,10 @@ def three_d():
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 def animate():
-    fig, axs = plt.subplots(2, 4)
+    fig, axs = plt.subplots(2, 4, figsize=(12, 12))
     camera = Camera(fig)
 
-    for i in range(0, n_steps, 200):
+    for i in range(0, n_steps, 1000):
         '''plt.figure()
         plt.plot(time, f_soluns[0][:,0])
         plt.plot(time, equilibrium)
@@ -181,26 +181,26 @@ def animate():
         axs[1, 1].set(xlabel='Position', ylabel='Velocity')
 
         for sol in phase_spaces:
-            axs[1, 2].plot(np.array(sol)[:,0][:i], np.array(sol)[:,1][:i])
+            axs[1, 2].plot(np.array(sol)[:,0][:math.floor(i/n_steps*len(sol))], np.array(sol)[:,1][:math.floor(i/n_steps*len(sol))])
         axs[1, 2].set_title('Phase Space')
         axs[1, 2].set(xlabel='Position', ylabel='Momentum')
 
-        axs[1, 0].plot(times_list[0][:i], masses_list[0][:i])
+        axs[1, 0].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], masses_list[0][:math.floor(i/n_steps*len(masses_list[0]))])
         axs[1, 0].set_title('Mass Function')
         axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
 
-        axs[0, 3].plot(times_list[0][:i], radii[0][:i])
+        axs[0, 3].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], radii[0][:math.floor(i/n_steps*len(radii[0]))])
         axs[0, 3].set_title('Radius vs. Time')
         axs[0, 3].set(xlabel='Time', ylabel='||p,x||')
 
         j = 0
         while j < len(radii):
-            axs[1, 3].plot(times_list[j][:i], radii[j][:i])
+            axs[1, 3].plot(times_list[j][:math.floor(i/n_steps*len(times_list[j]))], radii[j][:math.floor(i/n_steps*len(radii[j]))])
             j += 1
         axs[1, 3].set_title('Radius vs. Time')
         axs[1, 3].set(xlabel='Time', ylabel='||p,x||')
 
-        axs[0, 2].plot(np.array(phase_spaces[0])[:,0][:i], np.array(phase_spaces[0])[:,1][:i])
+        axs[0, 2].plot(np.array(phase_spaces[0])[:,0][:math.floor(i/n_steps*len(phase_spaces[0]))], np.array(phase_spaces[0])[:,1][:math.floor(i/n_steps*len(phase_spaces[0]))])
         axs[0, 2].set_title('Phase Space')
         axs[0, 2].set(xlabel='Position', ylabel='Momentum')
         print("Snap " + str(i))
