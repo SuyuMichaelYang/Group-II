@@ -5,6 +5,7 @@ import math
 from scipy.integrate import odeint
 from mpl_toolkits import mplot3d
 from celluloid import Camera
+from matplotlib.pyplot import cm
 
 def taylor(x,c):
     ts = [x**n/math.factorial(n) for n in range(ncoef)]
@@ -59,8 +60,8 @@ def deriv(f,t): # return derivatives of the array f[x,dx/dt,theta,dtheta/dt]
 
 
 ncoef = 4
-cm,cb,ck = [], [], []
-cm = make_coeffs(cm,0,1)
+cmass,cb,ck = [], [], []
+cmass = make_coeffs(cmass,0,1)
 cb = make_coeffs(cb,0,1)
 ck = make_coeffs(ck,0,1)
 
@@ -166,41 +167,41 @@ def animate():
         plt.show()
         plt.savefig('foo.png')'''
 
-        axs[0, 0].plot(f_soluns[0][:,0][:i], time[:i])
-        axs[0, 0].plot(equilibrium[:i], time[:i])
+        axs[0, 0].plot(f_soluns[0][:,0][:i], time[:i], c='r')
+        axs[0, 0].plot(equilibrium[:i], time[:i], c='b')
         axs[0, 0].set_title('System Position Solution')
         axs[0, 0].set(xlabel='Position', ylabel='Time')
 
-        axs[0, 1].plot(f_soluns[0][:,1][:i], time[:i])
-        axs[0, 1].plot(equilibrium[:i], time[:i])
+        axs[0, 1].plot(f_soluns[0][:,1][:i], time[:i], c='r')
+        axs[0, 1].plot(equilibrium[:i], time[:i], c='b')
         axs[0, 1].set_title('System Velocity Solution')
         axs[0, 1].set(xlabel='Velocity', ylabel='Time')
 
-        axs[1, 1].plot(f_soluns[0][:,0][:i], f_soluns[0][:,1][:i])
+        axs[1, 1].plot(f_soluns[0][:,0][:i], f_soluns[0][:,1][:i], c='r')
         axs[1, 1].set_title('Phase Space')
         axs[1, 1].set(xlabel='Position', ylabel='Velocity')
 
-        for sol in phase_spaces:
-            axs[1, 2].plot(np.array(sol)[:,0][:math.floor(i/n_steps*len(sol))], np.array(sol)[:,1][:math.floor(i/n_steps*len(sol))])
+
+        colors = cm.rainbow(np.linspace(0, 1, len(phase_spaces)))
+        for sol, color in zip(phase_spaces, colors):
+            axs[1, 2].plot(np.array(sol)[:,0][:math.floor(i/n_steps*len(sol))], np.array(sol)[:,1][:math.floor(i/n_steps*len(sol))], c=color)
         axs[1, 2].set_title('Phase Space')
         axs[1, 2].set(xlabel='Position', ylabel='Momentum')
 
-        axs[1, 0].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], masses_list[0][:math.floor(i/n_steps*len(masses_list[0]))])
+        axs[1, 0].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], masses_list[0][:math.floor(i/n_steps*len(masses_list[0]))], c='r')
         axs[1, 0].set_title('Mass Function')
         axs[1, 0].set(xlabel='Time', ylabel='Coefficient Value')
 
-        axs[0, 3].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], radii[0][:math.floor(i/n_steps*len(radii[0]))])
+        axs[0, 3].plot(times_list[0][:math.floor(i/n_steps*len(times_list[0]))], radii[0][:math.floor(i/n_steps*len(radii[0]))], c='r')
         axs[0, 3].set_title('Radius vs. Time')
         axs[0, 3].set(xlabel='Time', ylabel='||p,x||')
 
-        j = 0
-        while j < len(radii):
-            axs[1, 3].plot(times_list[j][:math.floor(i/n_steps*len(times_list[j]))], radii[j][:math.floor(i/n_steps*len(radii[j]))])
-            j += 1
+        for j, color in zip(range(len(radii)), colors):
+            axs[1, 3].plot(times_list[j][:math.floor(i/n_steps*len(times_list[j]))], radii[j][:math.floor(i/n_steps*len(radii[j]))], c=color)
         axs[1, 3].set_title('Radius vs. Time')
         axs[1, 3].set(xlabel='Time', ylabel='||p,x||')
 
-        axs[0, 2].plot(np.array(phase_spaces[0])[:,0][:math.floor(i/n_steps*len(phase_spaces[0]))], np.array(phase_spaces[0])[:,1][:math.floor(i/n_steps*len(phase_spaces[0]))])
+        axs[0, 2].plot(np.array(phase_spaces[0])[:,0][:math.floor(i/n_steps*len(phase_spaces[0]))], np.array(phase_spaces[0])[:,1][:math.floor(i/n_steps*len(phase_spaces[0]))], c='r')
         axs[0, 2].set_title('Phase Space')
         axs[0, 2].set(xlabel='Position', ylabel='Momentum')
         print("Snap " + str(i))
