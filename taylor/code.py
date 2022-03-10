@@ -154,7 +154,7 @@ def three_d():
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 def animate():
-    fig, axs = plt.subplots(2, 4, figsize=(12, 12))
+    fig, axs = plt.subplots(2, 4, figsize=(25, 12))
     camera = Camera(fig)
 
     for i in range(0, n_steps, 1000):
